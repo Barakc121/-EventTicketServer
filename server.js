@@ -1,6 +1,7 @@
 import express from "express";
 import usersRoutes from "./routes/usersRoutes.js";
 import events from "./routes/events.js";
+import tickets from "./routes/tickets.js";
 const app = express();
 
 app.use(express.json());
