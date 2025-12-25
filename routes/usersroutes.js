@@ -1,4 +1,3 @@
-
 import express from 'express';
 import { create, read } from '../utils.js';
 const router = express.Router()

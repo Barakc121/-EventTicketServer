@@ -6,40 +6,22 @@ export async function read(path) {
   return JSON.parse(fileContent);
 }
 
-export async function create(data, key) {
+export async function create(data, key, unique) {
   try {
-    const collection = await read(key+".json");
+    const collection = await read(key + ".json") || [];
     data = { id: collection[collection.length - 1]?.id + 1 || 1, ...data };
-    if(data.key === key){
-        console.error("The user is already registered ")
+    if (collection.some(item => item[unique] === data[unique])) {
+      throw new Error(`The ${key.slice(0,key.length-2)} is already exists`);
+    } else {
+      collection.push(data);
+      console.log("message:User registered successfully");
+      await fs.writeFile(key + ".json", JSON.stringify(collection, null, 2));
+      return data, { messege: "username append,goodluck" };
     }
-    collection.push(data);
-    console.log("message:User registered successfully");
-    await fs.writeFile(key + ".json", JSON.stringify(collection, null, 2));
-    return data,{messege :"username append,goodluck"};
-  } catch {
+  } catch (error) {
     console.log(error);
   }
 }
 
 
-// export async function createevents(data, key) {
-//   try {
-//     const collection = await read("event.json");
-//     data = { id: collection[collection.length - 1]?.id + 1 || 1, ...data };
-   
-//     collection.push(data);
-//     console.log("message:User registered successfully");
-//     await fs.writeFile(key + ".json", JSON.stringify(collection, null, 2));
-//     return data,{messege :"username append,goodluck"};
-//   } catch {
-//     console.log(error);
-//   }
-// }
-
-
-
-
-
-
-
+export default router
